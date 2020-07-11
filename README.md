@@ -11,6 +11,7 @@ Add your two desired DICOM input images to the `docker-fusion` folder, then run:
     docker run fuse /path/to/image1.dcm /path/to/image2.dcm
 
 If you see `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`, run:
+
 Windows:
 
     systemctl start docker
