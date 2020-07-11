@@ -23,3 +23,7 @@ MacOS:
     docker-machine create --driver virtualbox default
     docker-machine restart
     eval "$(docker-machine env default)"
+
+If you receive the error `docker: Error response from daemon: Conflict. The container name "/FUSE" is already in use`, run:
+
+    docker ps -q -a | xargs docker rm
