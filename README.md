@@ -4,9 +4,9 @@ To test the image fusion algorithm, run the following commands:
 
     git clone https://github.com/rvignav/docker-fusion.git
     cd docker-fusion
-    docker build -t fuse --build-arg i1=/path/to/image1.dcm --build-arg i2=/path/to/image2.dcm .
-    docker run --name FUSE fuse /path/to/image1.dcm /path/to/image2.dcm
-    docker cp FUSE:/img.png .
+    docker build -t fuse --build-arg i1=sample1.dcm --build-arg i2=sample2.dcm .
+    docker run --name FUSE fuse sample1.dcm sample2.dcm
+    docker cp FUSE:/img.dcm .
     
 The fused image is now stored in `docker-fusion/img.png` and can be opened and viewed.
 
