@@ -1,5 +1,6 @@
 import cv2
 import pydicom as dicom
+from pydicom.uid import ExplicitVRLittleEndian
 import numpy as np
 from numpy import linalg as LA
 import argparse
@@ -38,7 +39,36 @@ else:
 imf = pca[0]*im1 + pca[1]*im2
 cv2.imwrite("img.png", imf)
 
-print("Fused image saved to img.png")
+print("Fused image saved to img.dcm")
+ds = dicom.dcmread('sample1.dcm')
+ds.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian  # Add this 
 
-im = Image.open('img.png')
+im_frame = Image.open('img.png')
+
+if im_frame.mode == 'L':
+    # (8-bit pixels, black and white)
+    np_frame = np.array(im_frame.getdata(),dtype=np.uint8)
+    ds.Rows = im_frame.height
+    ds.Columns = im_frame.width
+    ds.PhotometricInterpretation = "MONOCHROME1"
+    ds.SamplesPerPixel = 1
+    ds.BitsStored = 8
+    ds.BitsAllocated = 8
+    ds.HighBit = 7
+    ds.PixelRepresentation = 0
+    ds.PixelData = np_frame.tobytes()
+    ds.save_as('img.dcm')
+elif im_frame.mode == 'RGBA':
+    # RGBA (4x8-bit pixels, true colour with transparency mask)
+    np_frame = np.array(im_frame.getdata(), dtype=np.uint8)[:,:3]
+    ds.Rows = im_frame.height
+    ds.Columns = im_frame.width
+    ds.PhotometricInterpretation = "RGB"
+    ds.SamplesPerPixel = 3
+    ds.BitsStored = 8
+    ds.BitsAllocated = 8
+    ds.HighBit = 7
+    ds.PixelRepresentation = 0
+    ds.PixelData = np_frame.tobytes()
+    ds.save_as('img.dcm')
 im.show()
