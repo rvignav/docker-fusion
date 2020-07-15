@@ -71,4 +71,3 @@ elif im_frame.mode == 'RGBA':
     ds.PixelRepresentation = 0
     ds.PixelData = np_frame.tobytes()
     ds.save_as('img.dcm')
-im.show()
