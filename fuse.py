@@ -1,10 +1,13 @@
 import cv2
 import pydicom as dicom
-from pydicom.uid import ExplicitVRLittleEndian
+from pydicom.uid import ExplicitVRLittleEndian, generate_uid
+from pydicom.dataset import Dataset, FileDataset, FileMetaDataset
 import numpy as np
 from numpy import linalg as LA
 import argparse
 from PIL import Image  
+import tempfile
+import datetime
 
 parser = argparse.ArgumentParser(description='Fuse two images')
 parser.add_argument('i1', type=str, help='Path to first image')
@@ -40,8 +43,18 @@ imf = pca[0]*im1 + pca[1]*im2
 cv2.imwrite("img.png", imf)
 
 print("Fused image saved to img.dcm")
-ds = dicom.dcmread('sample1.dcm')
-ds.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian  # Add this 
+file_meta = FileMetaDataset()
+file_meta.MediaStorageSOPInstanceUID = generate_uid()
+suffix = '.dcm'
+
+ds = FileDataset('img.dcm', {},
+                 file_meta=file_meta, preamble=b"\0" * 128)
+
+ds.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian 
+dt = datetime.datetime.now()
+ds.ContentDate = dt.strftime('%Y%m%d')
+timeStr = dt.strftime('%H%M%S.%f')  # long format with micro seconds
+ds.ContentTime = timeStr
 
 im_frame = Image.open('img.png')
 
