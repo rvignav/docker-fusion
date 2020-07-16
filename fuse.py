@@ -43,12 +43,15 @@ imf = pca[0]*im1 + pca[1]*im2
 cv2.imwrite("img.png", imf)
 
 print("Fused image saved to img.dcm")
+
 file_meta = FileMetaDataset()
-file_meta.MediaStorageSOPInstanceUID = generate_uid()
 suffix = '.dcm'
 
 ds = FileDataset('img.dcm', {},
                  file_meta=file_meta, preamble=b"\0" * 128)
+ds.SOPInstanceUID = generate_uid()
+ds.SeriesInstanceUID = generate_uid()
+ds.SeriesDescription = 'Resulting image from fusing ' + ds1.SeriesDescription + ' with ' + ds2.SeriesDescription
 
 ds.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian 
 dt = datetime.datetime.now()
