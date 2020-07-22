@@ -4,11 +4,11 @@ To test the image fusion algorithm, run the following commands:
 
     git clone https://github.com/rvignav/docker-fusion.git
     cd docker-fusion
-    docker build -t fuse --build-arg i1=sample1.dcm --build-arg i2=sample2.dcm .
-    docker run --name FUSE fuse sample1.dcm sample2.dcm
-    docker cp FUSE:/img.dcm .
-    
-The fused image is now stored in `docker-fusion/img.png` and can be opened and viewed.
+    docker build -t fuse --build-arg i1=Series1 --build-arg i2=Series2 .
+    docker run --name FUSE fuse Series1 Series2
+    docker cp FUSE:/series .
+
+The fused series is now stored in `docker-fusion/series` and can be opened and viewed.
 
 If you see `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`, run:
 
