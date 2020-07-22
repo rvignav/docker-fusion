@@ -10,6 +10,7 @@ import datetime
 import glob
 import sys
 import os
+import progressbar
 
 parser = argparse.ArgumentParser(description='Fuse two images')
 parser.add_argument('i1', type=str, help='Path to first series')
@@ -34,6 +35,9 @@ def bubble_sort(series):
 series1DCM = glob.glob(str(i1) + "/*.dcm")
 series2DCM = glob.glob(str(i2) + "/*.dcm")
 
+bar = progressbar.ProgressBar(maxval=len(series1DCM)/5 + 1, \
+    widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
+
 one = dicom.read_file(series1DCM[0])
 two = dicom.read_file(series2DCM[0])
 image1 = one.pixel_array 
@@ -45,12 +49,6 @@ if shape1[0] > shape2[0]:
   maxshape = shape1
 else:
   maxshape = shape2
-
-# Setup progress bar
-toolbar_width = int(len(series1DCM)/5)
-sys.stdout.write("Progress: [%s]" % (" " * toolbar_width))
-sys.stdout.flush()
-sys.stdout.write("\b" * (toolbar_width+1))
 
 # Sort lists
 for i in range(len(series1DCM)):
@@ -134,13 +132,13 @@ def save(filename, imf, ds1, ds2):
       ds.PixelData = np_frame.tobytes()
       ds.save_as('series/' + str(filename))
 
+bar.start()
 for i in range(len(series1DCM)):
   imf = fuse(series1DCM[i], series2DCM[i], maxshape)
   save('im'+str(i)+'.dcm', imf, series1DCM[i], series2DCM[i])
   if i % 5 == 0:
-    # update the bar
-    sys.stdout.write("-")
-    sys.stdout.flush()
-sys.stdout.write("]\n")
+    # update progress
+    bar.update(i/5 + 1)
+bar.finish()
 
 print("Fused images saved to the folder 'series'")

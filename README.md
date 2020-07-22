@@ -6,7 +6,7 @@ To test the image fusion algorithm, run the following commands:
     cd docker-fusion
     docker build -t fuse --build-arg i1=Series1 --build-arg i2=Series2 .
     docker run --name FUSE fuse Series1 Series2
-    docker cp FUSE:/series .
+    docker cp FUSE:/series ./series
 
 The fused series is now stored in `docker-fusion/series` and can be opened and viewed.
 
