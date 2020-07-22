@@ -60,7 +60,8 @@ for i in range(len(series2DCM)):
 series1DCM = bubble_sort(series1DCM)
 series2DCM = bubble_sort(series2DCM)
 
-os.mkdir('series')
+if not os.path.isdir('series'):
+  os.mkdir('series')
 
 def fuse(ds1, ds2, maxshape):
   im1 = ds1.pixel_array # np.asarray(cv2.imread(ds1.pixel_array, 0))
