@@ -35,6 +35,10 @@ def bubble_sort(series):
 series1DCM = glob.glob(str(i1) + "/*.dcm")
 series2DCM = glob.glob(str(i2) + "/*.dcm")
 
+if (len(series1DCM) != len(series2DCM)):
+    print("ERROR: The two inputted DICOM series do not have the same number of slices.")
+    exit(0)
+
 bar = progressbar.ProgressBar(maxval=len(series1DCM)/5 + 1, \
     widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
 
