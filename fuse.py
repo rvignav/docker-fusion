@@ -18,8 +18,25 @@ parser.add_argument('i2', type=str, help='Path to second series')
 
 args = parser.parse_args()
 
-i1 = args.i1
-i2 = args.i2
+series_path1 = args.i1
+series_path2 = args.i2
+studies = glob.glob('/home/series/PatientSeries/*')
+paths = []
+for study in studies:
+    series_paths = glob.glob(study + '/*')
+    for item in series_paths:
+        paths.append(item)
+
+i1 = ''
+i2 = ''
+for path in paths:
+    if series_path1 in path:
+        i1 = path
+        break
+for path in paths:
+    if series_path2 in path:
+        i2 = path
+        break
 
 def bubble_sort(series):
     swapped = True
@@ -32,6 +49,8 @@ def bubble_sort(series):
                 swapped = True
     return series
 
+print(i1)
+print(i2)
 series1DCM = glob.glob(str(i1) + "/*.dcm")
 series2DCM = glob.glob(str(i2) + "/*.dcm")
 
