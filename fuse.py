@@ -49,8 +49,6 @@ def bubble_sort(series):
                 swapped = True
     return series
 
-print(i1)
-print(i2)
 series1DCM = glob.glob(str(i1) + "/*.dcm")
 series2DCM = glob.glob(str(i2) + "/*.dcm")
 
