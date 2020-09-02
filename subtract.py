@@ -12,9 +12,10 @@ import sys
 import os
 import progressbar
 
-parser = argparse.ArgumentParser(description='Fuse two images')
+parser = argparse.ArgumentParser(description='Subtract one series from another')
 parser.add_argument('i1', type=str, help='Path to first series')
 parser.add_argument('i2', type=str, help='Path to second series')
+parser.add_argument('i3', type=str, help='(1) A - B or (2) B - A')
 
 args = parser.parse_args()
 
@@ -84,27 +85,17 @@ series2DCM = bubble_sort(series2DCM)
 if not os.path.isdir('output'):
   os.mkdir('output')
 
-def fuse(ds1, ds2, maxshape):
-  im1 = ds1.pixel_array
+def subtract(ds1, ds2, maxshape):
+  im1 = ds1.pixel_array 
   im2 = ds2.pixel_array
   im1 = cv2.resize(im1, maxshape)
   im2 = cv2.resize(im2, maxshape)
 
-  C = np.cov([im1.flatten('F'), im2.flatten('F')])
-  w, V = LA.eig(C)
-  a = []
-  b = []
-  D = np.diag(w)
-
-  for i in range(V.shape[0]):
-    a.append(V[i][0])
-    b.append(V[i][1])
-  if D[0][0] >= D[1][1]:
-    pca = a/sum(a)
+  if args.i3 == 1:
+      imf = im1 - im2
   else:
-    pca = b/sum(b)
-
-  imf = pca[0]*im1 + pca[1]*im2
+      imf = im2 - im1
+  
   return imf
 
 def save(filename, imf, ds1, ds2):
@@ -118,12 +109,15 @@ def save(filename, imf, ds1, ds2):
                   file_meta=file_meta, preamble=b"\0" * 128)
   ds.SOPInstanceUID = generate_uid()
   ds.SeriesInstanceUID = generate_uid()
-  ds.SeriesDescription = 'Fusion ' + ds1.SeriesDescription + ' ' + ds2.SeriesDescription
+  if args.i3 == 1:
+    ds.SeriesDescription = 'Subtract ' + ds1.SeriesDescription + ' from ' + ds2.SeriesDescription
+  else:
+    ds.SeriesDescription = 'Subtract ' + ds2.SeriesDescription + ' from ' + ds1.SeriesDescription
   ds.ContentCreatorName = 'ePAD'
   ds.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian 
   ds.ContentDate = datetime.datetime.now().strftime('%Y%m%d')
   ds.ContentTime = datetime.datetime.now().strftime('%H%M%S.%f')[:11]
-  ds.ContentLabel = 'Fusion'
+  ds.ContentLabel = 'Subtraction'
   ds.ImagePositionPatient = ds1.ImagePositionPatient
   ds.SliceLocation = ds1.SliceLocation
 
@@ -156,11 +150,11 @@ def save(filename, imf, ds1, ds2):
 
 bar.start()
 for i in range(len(series1DCM)):
-  imf = fuse(series1DCM[i], series2DCM[i], maxshape)
+  imf = subtract(series1DCM[i], series2DCM[i], maxshape)
   save('im'+str(i)+'.dcm', imf, series1DCM[i], series2DCM[i])
   if i % 5 == 0:
     # update progress
     bar.update(i/5 + 1)
 bar.finish()
 
-print("Fused images saved to the folder 'output'")
+print("Subtracted images saved to the folder 'output'")
