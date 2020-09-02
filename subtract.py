@@ -109,7 +109,7 @@ def save(filename, imf, ds1, ds2):
                   file_meta=file_meta, preamble=b"\0" * 128)
   ds.SOPInstanceUID = generate_uid()
   ds.SeriesInstanceUID = generate_uid()
-  if args.i3 == 1:
+  if args.i3 == 2:
     ds.SeriesDescription = 'Subtract ' + ds1.SeriesDescription + ' from ' + ds2.SeriesDescription
   else:
     ds.SeriesDescription = 'Subtract ' + ds2.SeriesDescription + ' from ' + ds1.SeriesDescription
