@@ -11,7 +11,7 @@ A possible command satisfying the bind and argument requirements is:
 
     docker run -v "$(pwd)/files:/home/series/files" -v "$(pwd)/SamplePatient:/home/series/PatientSeries" run "fuse.py" "Series1" "Series2"
 
-Similarly, to test the image fusion algorithm, run the following commands:
+Similarly, to test the image subtraction algorithm, run the following commands:
 
     git clone https://github.com/rvignav/docker-fusion.git
     cd docker-fusion
