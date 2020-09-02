@@ -9,7 +9,7 @@ Image fusion and image subtraction algorithms integrated into Stanford Universit
 
 A possible command satisfying the bind and argument requirements is:
 
-    docker run -v "$(pwd)/files:/home/series/files" -v "$(pwd)/SamplePatient:/home/series/PatientSeries" run "Series1" "Series2"
+    docker run -v "$(pwd)/files:/home/series/files" -v "$(pwd)/SamplePatient:/home/series/PatientSeries" run "fuse.py" "Series1" "Series2"
 
 Similarly, to test the image fusion algorithm, run the following commands:
 
