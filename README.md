@@ -18,7 +18,7 @@ Similarly, to test the image fusion algorithm, run the following commands:
     docker build -t run .
     docker run -v "local/files:/home/series/files" -v "local/patient/series:/home/series/PatientSeries" run "subtract.py" "filename of series 1" "filename of series 2" "1 or 2"
 
-For the final argument, "1" corresponds to the subtraction "series 1" - "series 2", while "2" corresponds to "series 2" - "series 1".
+For the final argument, `"1"` corresponds to the subtraction `"series 1" - "series 2"`, while `"2"` corresponds to `"series 2" - "series 1"`.
 
 A possible command satisfying the bind and argument requirements is:
 
