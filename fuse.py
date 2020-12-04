@@ -81,8 +81,8 @@ for i in range(len(series2DCM)):
 series1DCM = bubble_sort(series1DCM)
 series2DCM = bubble_sort(series2DCM)
 
-if not os.path.isdir('output'):
-  os.mkdir('output')
+if not os.path.isdir('/output'):
+  os.mkdir('/output')
 
 def fuse(ds1, ds2, maxshape):
   im1 = ds1.pixel_array
@@ -114,7 +114,7 @@ def save(filename, imf, ds1, ds2):
   file_meta = FileMetaDataset()
   suffix = '.dcm'
 
-  ds = FileDataset('output/' + str(filename), {},
+  ds = FileDataset('/output/' + str(filename), {},
                   file_meta=file_meta, preamble=b"\0" * 128)
   ds.SOPInstanceUID = generate_uid()
   ds.SeriesInstanceUID = generate_uid()
@@ -139,7 +139,7 @@ def save(filename, imf, ds1, ds2):
       ds.HighBit = 7
       ds.PixelRepresentation = 0
       ds.PixelData = np_frame.tobytes()
-      ds.save_as('output/' + str(filename))
+      ds.save_as('/output/' + str(filename))
   elif im_frame.mode == 'RGBA':
       # RGBA (4x8-bit pixels, true colour with transparency mask)
       np_frame = np.array(im_frame.getdata(), dtype=np.uint8)[:,:3]
@@ -152,7 +152,7 @@ def save(filename, imf, ds1, ds2):
       ds.HighBit = 7
       ds.PixelRepresentation = 0
       ds.PixelData = np_frame.tobytes()
-      ds.save_as('output/' + str(filename))
+      ds.save_as('/output/' + str(filename))
 
 bar.start()
 for i in range(len(series1DCM)):
@@ -163,4 +163,4 @@ for i in range(len(series1DCM)):
     bar.update(i/5 + 1)
 bar.finish()
 
-print("Fused images saved to the folder 'output'")
+print("Fused images saved to the folder '/output'")
