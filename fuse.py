@@ -20,12 +20,14 @@ args = parser.parse_args()
 
 series_path1 = args.i1
 series_path2 = args.i2
-studies = glob.glob('/home/series/PatientSeries/*')
+patients = glob.glob('/home/series/PatientSeries/*')
 paths = []
-for study in studies:
-    series_paths = glob.glob(study + '/*')
-    for item in series_paths:
-        paths.append(item)
+for patient in patients:
+    studies = glob.glob(patient + '/*')
+    for study in studies:
+      series_paths = glob.glob(study + '/*')
+      for item in series_paths:
+          paths.append(item)
 
 i1 = ''
 i2 = ''
