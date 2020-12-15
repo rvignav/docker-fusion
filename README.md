@@ -1,4 +1,4 @@
-# docker-fusion
+# [docker-fusion](https://hub.docker.com/repository/docker/rvignav/docker-fusion)
 
 Image fusion and image subtraction algorithms integrated into Stanford University's [ePAD Imaging Platform](https://epad.stanford.edu/plugins). To test the image fusion algorithm, run the following commands:
 
